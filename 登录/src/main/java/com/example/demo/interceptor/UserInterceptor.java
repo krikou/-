@@ -3,16 +3,23 @@ package com.example.demo.interceptor;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+
+import com.example.demo.entity.TokenInfo;
 import org.apache.commons.lang3.StringUtils;
 import com.example.demo.base.ResponseBase;
-import com.example.demo.entity.TakenInfo;
+import com.example.demo.entity.TokenInfo;
 import com.example.demo.util.JsonUtil;
+import com.example.demo.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import static com.example.demo.util.JwtUtil.decodedToken;
 
 
 /**
@@ -30,7 +37,7 @@ public class UserInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) {
 
 		// 检查用户传递的 token是否合法
-		TakenInfo tokenInfo = this.getUserToKen(request);
+		TokenInfo tokenInfo = this.getUserToKen(request);
 		if (StringUtils.isBlank(tokenInfo.getAdminId()) && StringUtils.isBlank(tokenInfo.getToken())) {
 			// 返回登录
 			System.out.println("没有传入对应的身份信息，返回登录");
@@ -46,7 +53,7 @@ public class UserInterceptor implements HandlerInterceptor {
 				return false;
 			}
 		} catch (Exception e) {
-			System.out.println("校验失败,对呀的信息匹配错误，返回登录");
+			System.out.println("校验失败,信息匹配错误，返回登录");
 			return false;
 		}
 
@@ -55,8 +62,8 @@ public class UserInterceptor implements HandlerInterceptor {
 	/**
 	 * 在cookie中获取用户传递的token
 	 */
-	private TakenInfo getUserToKen(HttpServletRequest request) {
-		TakenInfo info = new TakenInfo();
+	private TokenInfo getUserToKen(HttpServletRequest request) {
+		TokenInfo info = new TokenInfo();
 		String adminId = request.getHeader("adminId");
 		String token = request.getHeader("token");
 		if (StringUtils.isNotBlank(adminId) && StringUtils.isNotBlank(token)) {
@@ -99,5 +106,4 @@ public class UserInterceptor implements HandlerInterceptor {
 			}
 		}
 	}
-
 }

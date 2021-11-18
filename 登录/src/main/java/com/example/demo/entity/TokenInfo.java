@@ -1,5 +1,4 @@
 package com.example.demo.entity;
-
 import lombok.Data;
 import lombok.ToString;
 
@@ -8,7 +7,7 @@ import lombok.ToString;
  */
 @Data
 @ToString
-public class TakenInfo {
+public class TokenInfo {
     private String adminId;
     private String token;
 }

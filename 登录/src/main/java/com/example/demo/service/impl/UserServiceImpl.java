@@ -8,12 +8,15 @@ import com.example.demo.base.ResponseBase;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import com.example.demo.mapper.UserMapper;
+import com.example.demo.util.JwtUtil;
 import com.example.demo.util.ProductToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sound.midi.Soundbank;
+
+import static com.example.demo.util.JwtUtil.getterToken;
 
 /**
  * @author nan.gai
@@ -25,8 +28,8 @@ public class UserServiceImpl extends BaseService implements UserService {
 	@Override
 	public ResponseBase UserLogin(String username, String password) {
 		//1.校验登陆是否成功
-
 		User user = userMapper.getUserInfo(username, password);
+
 		//2.如果不成功返回提示
 		if (user == null) {
 			return setResultError("账户名密码错误！！！");
@@ -53,5 +56,5 @@ public class UserServiceImpl extends BaseService implements UserService {
 	private ProductToken productToken;
 	@Autowired
 	private UserMapper userMapper;
-	
+
 }
